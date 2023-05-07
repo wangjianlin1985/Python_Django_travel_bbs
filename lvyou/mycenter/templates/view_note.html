@@ -1,0 +1,120 @@
+{% extends "base_with_menu.html" %}
+{% block title %} 写攻略 {% endblock title %}
+{% block content %}
+    <link rel="stylesheet" href="/static/css/jquery.Jcrop.css">
+    <link rel="stylesheet" href="/static/css/edit_guide.css">
+    <style>
+        .view_title_img_conten {
+            position: relative;
+            width: 100%;
+            height: 450px;
+
+        }
+
+        .view_title_img_conten p {
+            position: absolute;
+            left: 350px;
+            top: 380px;
+            font-family: "Microsoft YaHei";
+            font-size: 3rem;
+            color: white;
+        }
+
+        .view_title_img_conten .user_icon {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 100px;
+            left: 200px;
+            top: 390px;
+        }
+
+        .view_body_title, .view_body_body, .view_body_img {
+            margin: 10px 20px 20px 100px;
+        }
+
+        .view_body_title {
+            text-align: center;
+        }
+
+        .view_body_body {
+            text-indent: 2rem;
+            font-size: 1.5rem;
+            font-family: "Microsoft YaHei";
+        }
+
+        .content_right {
+            padding-top: 50px;
+            padding-left: 20px;
+
+        }
+
+        .content_right p {
+            cursor: pointer;
+            line-height: 30px;
+        }
+
+        .content_right p:first-child {
+            font-size: 2rem;
+            font-weight: 600;
+        }
+
+        .view_body_img {
+            width: 700px;
+        }
+
+        .view_buttom_cent {
+            height: 50px;
+            line-height: 50px;
+            background-color: #3C3C3C;
+            opacity: 0.7;
+            text-align: right;
+            padding-right: 20rem;
+        }
+    </style>
+    <div class="view_title_img_conten">
+        <img style="width: 100%;height:450px;overflow:auto" src="{{ title.title_path }}" alt="{{ title.name }}">
+        <p id="{{ title.title_uuid }}">{{ title.name }}</p>
+        <img class="user_icon" src="/static/media/icon/sysicon/56dadad0cb434837.jpg" alt="">
+    </div>
+    </div>
+    <hr style="margin-top: 70px;">
+    <div class="container" style="min-height: 500px;padding-bottom: 80px">
+        <div class="col-lg-9" style="min-height: 600px;padding-bottom: 20px">
+
+            {% for item in bodys %}
+                {% if item.action == "s_title" %}
+                    <div class="view_body_title">
+                        <h3 id="{{ item.body_uuid }}">{{ item.text }}</h3>
+                    </div>
+                {% elif item.action == "s_body" %}
+                    <div class="view_body_body">
+                        <p id="{{ item.body_uuid }}">{{ item.text }}</p>
+                    </div>
+                {% elif item.action == "b_img" %}
+                    <div class="view_body_img">
+                        <img id="{{ item.body_uuid }}" style="width: 700px" src="{{ item.path }}" alt="{{ item.image_name }}">
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="col-lg-3 content_right">
+            <p>攻略目录</p>
+            {% for item in bodys %}
+                {% if item.action == "s_title" %}
+                    <p>{{ item.text }}</p>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+
+    </div>
+    <div class="navbar-fixed-bottom view_buttom_cent">
+        <div class="container">
+            <button type="button" class="btn btn-info">&nbsp;&nbsp;返回&nbsp;&nbsp;</button>
+        </div>
+
+    </div>
+
+
+{% endblock content %}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css.map">
+    <link rel="stylesheet" href="/static/css/login_and_register.css">
+    <script src="/static/js/vendor/jquery-1.11.1.min.js"></script>
+    <style>
+
+        .log-box-lable, .log-box-lable:hover, .log-box-lable:active {
+            border: none;
+            text-decoration: none;
+            background: none;
+            outline: none;
+            z-index: 10;
+        }
+
+        .box-login-active {
+            color: #175199;
+        }
+
+        .box-login-active:hover {
+            border-bottom: 1px solid #175199;
+        }
+
+    </style>
+</head>
+<body>
+<img class="auto-background-img" src="/static/media/images/sysimg/beijing_lvse_fengye.jpg" alt="">
+
+<div class="container">
+    <div class="container-top">
+        <a href="/"><img src="/static/media/icon/icon/lvyou_128x128_lv.png" alt="旅游"></a>
+    </div>
+    <div class="login-box">
+
+        <form id="submit_login" action="/user/login/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="input" v-on:blur="username_blur" v-model="username" name="username" class="form-control"
+                       id="username" placeholder="username">
+                {% if user_msg %}
+                    <p>用户名不存在</p>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label id="password_label" for="password">密码</label>
+
+                <input type="password" v-on:blur="password_blur" v-model="password" name="password" class="form-control"
+                       id="password" placeholder="请输入密码">
+                <div id="login_code_input" style="display: none">
+                    <div class="input-group">
+                        <input type="text" v-model="password" class="form-control" placeholder="请输入验证码">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" id="get_tel_code" style="outline: none" @click="get_tel_code"
+                                type="button">获取短信验证码</button>
+                    </span>
+                    </div>
+                </div>
+                {% if psd_msg %}
+                    <p>密码错误</p>
+                {% endif %}
+                {% if active_msg %}
+                    <p>账户被禁用</p>
+                {% endif %}
+            </div>
+            <div class="form-group" style="padding:0 1rem 2rem 0">
+                <button id="switch_login_way" type="button" @click="switch_login_way"
+                        class="navbar-left log-box-lable box-login-active">
+                    手机验证码登陆
+                </button>
+                <button type="button" @click="forget_password" class="navbar-right log-box-lable">忘记密码?</button>
+            </div>
+
+            <button type="submit" @click="on_submit" class="btn btn-default form-control">登陆</button>
+        </form>
+
+    </div>
+    <div class="switch_login_register"><span>还没有账号<a href="/to_register/">去注册</a></span></div>
+</div>
+
+
+</body>
+<script src="/static/js/vendor-components/vue2.0/vue.js"></script>
+<script src="/static/js/vendor/bootstrap.js"></script>
+<script>
+
+    var register = new Vue({
+        delimiters: ['{$', '$}'],
+        el: "#submit_login",
+        data: {
+            "username": null,
+            "password": null,
+            "login_way": "password",
+            "second": 0,
+        },
+        methods: {
+            username_blur: function () {
+                $("[name='username']").parent().find("p").detach();
+                if (this.username === null || this.username === "") {
+                    var p = '<p>用户名不能为空！</p>    ';
+                    $(p).insertAfter($("[name='username']"))
+                } else if (this.username.toString().length < 4) {
+                    var p = '<p>用户名长度必须大于5！</p>    ';
+                    $(p).insertAfter($("[name='username']"))
+                }
+            },
+            password_blur: function () {
+                var msg = "验证码";
+                if (this.login_way == "password")
+                    msg = "密码";
+                //todo:验证存在问题
+
+                $("[name='password']").parent().find("p").detach();
+                if (this.password === null || this.password === "") {
+                    var p = '<p>' + msg + '不能为空</p>    ';
+                    $(p).insertAfter($("[name='password']"))
+                } else if (this.password.toString().length < 4) {
+                    var p = '<p>' + msg + '长度至少4位</p>    ';
+                    $(p).insertAfter($("[name='password']"))
+                }
+            },
+            on_submit: function (event) {
+                if (this.username === null || this.password === null) {
+                    $("[name='password']").parent().find("p").detach();
+                    var p = '<p>用户名或者密码不能为空！</p>';
+                    $(p).insertAfter($("[name='password']"))
+                    event.preventDefault();
+                }
+                else if (this.username.toString() < 4 || this.password.toString().length < 4) {
+                    event.preventDefault();
+                }
+            },
+            switch_login_way: function () {
+                var self = this;
+                if (self.login_way == "password") {
+                    $("#login_code_input").css("display", "block");
+                    $("#password").css("display", "none");
+                    $("#password_label").html("验证码");
+                    $("#switch_login_way").html("密码登陆(账号或者邮箱)");
+                    self.login_way = "code"
+
+                } else {
+                    $("#login_code_input").css("display", "none");
+                    $("#password").css("display", "block");
+                    $("#password_label").html("密码");
+                    $("#switch_login_way").html("手机验证码登陆");
+                    self.login_way = "password"
+                }
+            },
+            forget_password: function () {
+                console.log("忘记密码")
+            },
+            get_tel_code: function () {
+                var self = this;
+                console.log(self._data);
+
+                if (self.second == 0) {
+                    $("#get_tel_code").attr("disabled", "true");
+                    $("#get_tel_code").css("color", "#999999");
+                    self.second = 60;
+                    var second = 60;
+                    var int = setInterval(function () {
+                        $("#get_tel_code").html(second + " 秒后可重发");
+                        second = second - 1;
+                        if (second == 0) {
+                            $("#get_tel_code").removeAttr("disabled");
+                            $("#get_tel_code").html("重新发送");
+                            $("#get_tel_code").css("color", "#428BCA");
+                            self.second = second;
+                            clearInterval(int)
+                        }
+
+                    }, 1000);
+                    var data = {
+                        "csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val(),
+                        "username": self.username,
+                        "password": self.password,
+                        "action": "login"
+                    };
+                    $.post("/get_tel_code/", data, function (result) {
+                        result = JSON.parse(result);
+                        console.log(result)
+                    });
+                    console.log(self.username)
+
+                }
+
+            }
+
+        }
+    })
+</script>
+
+</html>

@@ -1,0 +1,360 @@
+{% extends "base_with_menu.html" %}
+{% block title %} 首页 {% endblock title %}
+{% block ext_before_css %} {% endblock ext_before_css %}
+{% block ext_after_css %}
+    {#    <link rel="stylesheet" type="text/css" href="/static/bootstrap/css/bootstrap.css">#}
+    <link rel="stylesheet" type="text/css" href="/static/font-awesome/css/font-awesome.css">
+    <link href="/static/css/animate.min.css" rel="stylesheet" media="all">
+    <link href="/static/css/bootstrap-touch-slider.css" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="/static/css/aos.css"/> <!--动画-->
+    <link rel="stylesheet" type="text/css" href="/static/css/demo1.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/ff_index.css">
+    <style>
+        .travel_text_txt {
+            color: #ffffff;
+            font-size: 2rem;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+    </style>
+{% endblock ext_after_css %}
+{% block content %}
+    <div style="margin: 0;padding: 0" class="f_index">
+        <div id="bootstrap-touch-slider" class="carousel bs-slider fade control-round indicators-line"
+             data-ride="carousel"
+             data-pause="hover" data-interval="5000">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#bootstrap-touch-slider" data-slide-to="0" class="active"></li>
+                <li data-target="#bootstrap-touch-slider" data-slide-to="1"></li>
+                <li data-target="#bootstrap-touch-slider" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper For Slides -->
+            <div class="carousel-inner" role="listbox">
+                <!-- Third Slide -->
+                <div class="item active">
+
+                    <!-- Slide Background -->
+                    <img src="/static/images/lgh3.jpg" alt="Bootstrap Touch Slider" class="slide-image"/>
+                    <div class="bs-slider-overlay"></div>
+
+                    <div class="container">
+                        <div class="row">
+                            <!-- Slide Text Layer -->
+                            <div class="slide-text slide_style_center">
+                                <h1 data-animation="animated zoomInRight">欢迎来到一游旅游社区</h1>
+                                <p data-animation="animated fadeInLeft">我们将带你，领略山水之美</p>
+                                <a href="/guide/1/" target="_blank" class="btn btn-default"
+                                   data-animation="animated fadeInLeft">旅行攻略</a>
+                                <a href="/community/all/0/" target="_blank" class="btn btn-primary"
+                                   data-animation="animated fadeInRight">旅行社区</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- End of Slide -->
+
+                <!-- Second Slide -->
+                <div class="item">
+
+                    <!-- Slide Background -->
+                    <img src="/static/images/lgh1.jpg" alt="Bootstrap Touch Slider" class="slide-image"/>
+                    <div class="bs-slider-overlay"></div>
+                    <!-- Slide Text Layer -->
+                    <div class="slide-text slide_style_center">
+                        <h1 data-animation="animated flipInX">一起去看看这个世界</h1>
+                        <p data-animation="animated lightSpeedIn">不要一个人孤独地前行，我们要一起携手迎接明天.</p>
+                        <a href="/guide/1/" target="_blank" class="btn btn-default"
+                           data-animation="animated fadeInUp">旅行攻略</a>
+                        <a href="/community/all/0/" target="_blank" class="btn btn-primary"
+                           data-animation="animated fadeInDown">旅行社区</a>
+                    </div>
+                </div>
+                <!-- End of Slide -->
+
+                <!-- Third Slide -->
+                <div class="item">
+                    <img src="/static/images/bg.jpg" alt="Bootstrap Touch Slider" class="slide-image"/>
+                    <div class="bs-slider-overlay"></div>
+                    <div class="slide-text slide_style_center">
+                        <h1 data-animation="animated zoomInLeft">关于我们</h1>
+                        <p data-animation="animated fadeInRight">专注旅游攻略，专注旅游社区问答</p>
+                        <a href="/guide/1/" target="_blank" class="btn btn-default"
+                           data-animation="animated fadeInLeft">旅行攻略</a>
+                        <a href="/community/all/0/" target="_blank" class="btn btn-primary"
+                           data-animation="animated fadeInRight">旅行社区</a>
+                    </div>
+                </div>
+                <!-- End of Slide -->
+            </div>
+            <!-- End of Wrapper For Slides -->
+            <a class="left carousel-control" href="#bootstrap-touch-slider" role="button" data-slide="prev">
+                <span class="fa fa-angle-left" aria-hidden="true" style="font-size: 55px"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#bootstrap-touch-slider" role="button" data-slide="next">
+                <span class="fa fa-angle-right" aria-hidden="true" style="font-size: 55px"></span>
+                <span class="sr-only">Next</span>
+            </a>
+
+        </div>
+        <!-- End  轮播-->
+        <!--热门旅游攻略-->
+        <div class="hot_strategy">
+            <h3 class="text-center">最美不过这里</h3>
+            <div>
+                <div class="hnav clearfix">
+                    <button class="nav-el" id="el-topleft" data-id="ov-topleft">
+                        <img src="/static/images/df1.jpg" class="navel_img"/>
+                        <div class="h_olay">
+                            <span>东方明珠</span>
+                            <span class="icon-eye"></span>
+                        </div>
+                    </button>
+                    <button class="nav-el" id="el-topright" data-id="ov-topright">
+                        <img src="/static/images/djy1.jpg" class="navel_img"/>
+                        <div class="h_olay">
+                            <span>都江堰</span>
+                            <span class="icon-eye"></span>
+                        </div>
+                    </button>
+                    <button class="nav-el" id="el-btmleft" data-id="ov-btmleft">
+                        <img src="/static/images/yn2.jpg" class="navel_img"/>
+                        <div class="h_olay">
+                            <span>丽江古城</span>
+                            <span class="icon-eye"></span>
+                        </div>
+                    </button>
+                    <button class="nav-el" id="el-btmright" data-id="ov-btmright">
+                        <img src="/static/images/xh2.jpg" class="navel_img"/>
+                        <div class="h_olay">
+                            <span>西湖</span>
+                            <span class="icon-eye"></span>
+                        </div>
+                    </button>
+                </div>
+                <!-- Overlay (hidden by default)-->
+                <section class="overlay" id="ov-topleft">
+                    <div class="wrap">
+                        <h1>上海-东方明珠</h1>
+                        <img src="/static/images/df1.jpg" class="hso_img img-responsive"/>
+                        <p style="font-size: 2rem;line-height: 4rem">
+                            <br>
+                            外滩广场上人流如织，笑声一片， <br>
+                            车灯伴着高楼大厦的灯光敞处搬肺植镀邦僧鲍吉，<br>
+                            像一幅绵绵不断的画卷，比传说中的仙女织的丝绸还要美丽动人。<br>
+                            各色的外国建筑在灯光的映照下闪闪发光，犹如用黄金砌成的，<br>
+                            它们好像在向我们诉说着上海的历史。<br><br><br><br><br><br>
+                        </p>
+                    </div>
+                    <button class="close"><span class="mfg-cancel"></span></button>
+                </section>
+                <section class="overlay" id="ov-topright">
+                    <div class="wrap">
+                        <h1>成都-都江堰</h1>
+                        <img src="/static/images/djy2.jpeg" class="hso_img img-responsive"/>
+                        <p style="font-size: 2rem;line-height: 4rem">
+                            <br>
+                            岷江遥从天际来，神功凿破古离堆。<br>
+                            恩波浩渺连三楚，惠泽膏流润九垓。<br>
+                            劈斧岩前飞瀑雨，伏龙潭底响轻雷。<br>
+                            筑堤不敢辞劳苦，竹石经营取次裁。<br><br><br><br><br><br>
+                        </p>
+                    </div>
+
+                    <button class="close"><span class="mfg-cancel"></span></button>
+                </section>
+                <section class="overlay" id="ov-btmleft">
+                    <div class="wrap">
+                        <h1>云南-丽江古城</h1>
+                        <img src="/static/images/yn3.jpg" class="hso_img img-responsive"/>
+                        <p style="font-size: 2rem;line-height: 4rem">
+                            <br>
+                            家家流水，塘塘垂柳，五彩石清爽路。<br>
+                            桃花源里走一回，携妻子，轻轻慢步。<br>
+                            瓦屋栉比，院芳香郁，颇好客民风朴。<br>
+                            来生木府做闲人，叹没有、阎王笔簿。<br><br><br><br><br><br>
+                        </p>
+                    </div>
+
+                    <button class="close"><span class="mfg-cancel"></span></button>
+                </section>
+                <section class="overlay" id="ov-btmright">
+                    <div class="wrap">
+                        <h1>杭州-西湖</h1>
+                        <img src="/static/images/xh_dq.jpg" class="hso_img img-responsive"/>
+                        <p style="font-size: 2rem;line-height: 4rem">
+                            <br>
+                            西湖天下景，游者无愚贤。<br>
+                            深浅随所得，谁能识其全。<br>
+                            嗟我本狂直，早为世所捐。<br>
+                            独专山水乐，付与宁非天。<br>
+                            三百六十寺，幽寻遂穷年。<br>
+                            所至得其妙，心知口难传。<br>
+                            至今清夜梦，耳目余芳鲜。<br>
+                            君持使者节，风采烁云烟。<br>
+                            清流与碧巘，安肯为君妍。<br>
+                            胡不屏骑従，暂借僧榻眠。<br>
+                            读我壁间诗，清凉洗烦煎。<br>
+                            策杖无道路，直造意所便。<br>
+                            应逢古渔父，苇间自延缘。<br>
+                            问道若有得，买鱼勿论钱。<br><br><br><br><br><br>
+                        </p>
+                    </div>
+
+                    <button class="close"><span class="mfg-cancel"></span></button>
+                </section>
+            </div>
+        </div>
+        <!--AOA动画-->
+        <div class="row">
+            <div class="hero">
+                <div class="hero-center">
+                    <h1 class="text-center">关于旅游社区</h1>
+                    <h2 class="hero__text" aos="fade-up" aos-easing="ease" aos-delay="400">你了解我吗？</h2>
+                </div>
+                <span class="hero__scroll" aos="fade-up" aos-easing="ease" aos-delay="800"> 来看看 <br>
+                <i class="chevron bottom"></i>
+            </span>
+            </div>
+            <section class="section section--code">
+                <div class="container">
+                    <!--<h2 class="section-title">Fade</h2>-->
+                    <div class="code code--small code--left travel_text_txt" aos="fade-up" aos-duration="3000">
+                        随着人们精神生活需求不断提高，旅游成了人们的主要休闲方式。有些人为了保留美好记忆和方便他人，往往在旅行之后把旅行的经历和旅行的心得记录下来，并与他人分享。
+                        目前，虽然携程、途牛等旅游在线平台提供有这种服务，但由于系统过于庞大，广告推送过多，降低了人们的体验，增加了人们使用的复杂性。
+                    </div>
+                    <div class="code code--small code--right travel_text_txt" aos="fade-down" aos-easing="linear"
+                         aos-duration="1500">
+                        网上旅行社区所倡导的社区文化能够给人们提供丰富的的旅游资源,和同伴们一起旅行能够营造出不错的的旅行环境。
+                        用户在旅行社区中感受到家庭般的温暖,在一定程度上消除孤独,为社会增加正能量。
+                    </div>
+                    <div class="code code--small code--left travel_text_txt" aos="fade-right" aos-easing="ease-in-sine"
+                         aos-duration="1500">
+                        风格统一、页面简洁、功能明确，没有多余的广告使页面看起来更加的舒心，使我们能够更专注的与人交流。
+                        而且我们的社区是不要求实名的，可以匿名发布一些感兴趣的话题而不用担心会因此给自己的生活带来不利影响。
+                    </div>
+                    <div class="code code--small code--right travel_text_txt" aos="fade-left">
+                        Python语言能够轻松实现一些常见开发任务，适合快速开发一些项目。基于Python开发网上旅行社区具有方便快速的特点。通过毕业设计，提高实际项目动手能力，
+                        积累实践经验，设计和实现的系统为人们提供丰富的的旅游资源，为爱好旅游的人们，解疑答惑提高旅行体验，分享喜悦。
+                    </div>
+                    <div class="code code--small code--left travel_text_txt" aos="fade-up-right">
+                        我们希望在旅游产品泛滥的当下，通过我们的努力向旅游爱好者提供一个简洁，温馨的平台，使之在旅行过后能够分享喜悦，
+                        或者让人们遇到疑惑时能够借助一个专业的旅行社区给解答疑惑，作为自己下一步的参考。
+
+                    </div>
+
+                </div>
+            </section>
+        </div>
+    </div>
+{% endblock content %}
+{% block ext_js %}
+
+    {#<script src="/static/js/jquery-2.1.1.min.js" type="text/javascript"></script>#}
+    {#<script src="/static/bootstrap/js/bootstrap.min.js"></script>#}
+    <script src="/static/js/highlight.min.js"></script>
+    <script src="/static/js/aos.js"></script>
+    <!--<script src="http://cdn.bootcss.com/jquery.touchswipe/1.6.18/jquery.touchSwipe.min.js"></script>-->
+    <script src="/static/js/jquery.touchSwipe.min.js"></script>
+    <script src="/static/js/bootstrap-touch-slider-min.js"></script>
+    <script>
+        (function () {
+            var method;
+            var noop = function () {
+            };
+            var methods = [
+                'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
+                'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',
+                'markTimeline', 'profile', 'profileEnd', 'table', 'time', 'timeEnd',
+                'timeStamp', 'trace', 'warn'
+            ];
+            var length = methods.length;
+            var console = (window.console = window.console || {});
+
+            while (length--) {
+                method = methods[length];
+
+                // Only stub undefined methods.
+                if (!console[method]) {
+                    console[method] = noop;
+                }
+            }
+        }());
+
+        // Place any jQuery/helper plugins in here.
+        if (!Modernizr.csstransforms3d) {
+            document.getElementsByClassName('hot_strategy')[0].className += ' browser_not_supported'
+        }
+    </script>
+    <script type="text/javascript">
+        $('#bootstrap-touch-slider').bsTouchSlider();
+
+        //热门旅游攻略
+        var AnimEnd = 'animationend webkitAnimationEnd mozAnimationEnd MSAnimationEnd oAnimationEnd';
+        var nav = $('.hnav');
+        var navButton = $('.nav-el');
+        var overlay = $('.overlay');
+
+        /* On menu button click event */
+        $(navButton).click(function (event) {
+            if ($(this).hasClass("inactive")) {
+
+                event.preventDefault();
+
+            } else {
+                /* Remove old previous classes */
+                $(navButton).removeClass('inactive_reverse active_reverse');
+                $(nav).removeClass('fx-box_rotate fx-box_rotate_reverse');
+                $(overlay).removeClass('active active_reverse');
+
+                /* Add classes on defined elements */
+                $(this).siblings().addClass('inactive');
+                $(this).addClass('active');
+                $(nav).addClass('fx-box_rotate');
+
+                /* Activate related overlay */
+                var o_target = $(this).data('id');
+                $('#' + o_target).addClass('active');
+
+                /* Prevent scrolling */
+                $(".hot_strategy").addClass('noscroll');
+
+            }
+
+        });
+
+        /* On close button click event */
+        $(".close").click(function () {
+            /* Add *_reverse classes */
+            $('.active', nav).removeClass('active').addClass('active_reverse');
+            $('.inactive', nav).addClass('inactive_reverse');
+            $('.hnav').addClass('fx-box_rotate_reverse');
+            $(this).parent().addClass('active_reverse');
+
+            /* Remove .noscroll and .inactive when animation is finished */
+            $('.inactive_reverse').bind(AnimEnd, function () {
+                $('.hot_strategy').removeClass('noscroll');
+                $(navButton).removeClass('inactive');
+                $('.inactive_reverse').unbind(AnimEnd);
+
+            });
+
+        });
+    </script>
+    <script>
+        AOS.init({
+            easing: 'ease-out-back',
+            duration: 1000
+        });
+    </script>
+    <script>
+        hljs.initHighlightingOnLoad();
+
+        $('.hero__scroll').on('click', function (e) {
+            $('html, body').animate({
+                scrollTop: $(window).height() + 1300
+            }, 1200);
+        });
+    </script>
+{% endblock ext_js %}
+

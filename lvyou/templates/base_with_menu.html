@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ch">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="Description" content=""/>
+    <title>{% block title %}欢迎光临{% endblock title %}</title>
+    {% block ext_before_css %} {% endblock ext_before_css %}
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    {#    <link rel="stylesheet" href="/static/css/bootstrap.css.map">#}
+    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">-->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <!--<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>-->
+    <script src="/static/js/vendor/jquery-1.11.1.min.js"></script>
+    <!--<script src="/static/js/vendor/jquery-3.1.1.js"></script>-->
+    <!--<script src="/static/js/vendor/jquery-3.1.1.min.js"></script>-->
+    {% block ext_after_css %} {% endblock ext_after_css %}
+
+</head>
+<body>
+<header>
+    {% include "header.html" %}
+</header>
+<div>
+    {% csrf_token %}
+    {% block content %}
+        <!--这里调用index.html文件显示首页内容-->
+    {% endblock content %}
+</div>
+
+<footer>
+    {% include "footer.html" %}
+</footer>
+<script src="/static/js/vendor-components/vue2.0/vue.js"></script>
+<script src="/static/js/vendor/bootstrap.js"></script>
+{% block ext_js %}
+
+{% endblock ext_js %}
+
+</body>
+
+</html>

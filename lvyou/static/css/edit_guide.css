@@ -1,0 +1,151 @@
+/*上传文件的图片*/
+.fileinput-button {
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.fileinput-button span {
+    font-size: 6em;
+    color: #3C3C3C;
+}
+
+.fileinput-button input {
+    position: absolute;
+    right: 0px;
+    height: 6em;
+    top: 0px;
+    opacity: 0;
+    -ms-filter: 'alpha(opacity=0)';
+}
+
+/*上传文件图标*/
+
+.c_n_edit_container {
+    width: 80%;
+    margin: auto;
+    margin-top: auto;
+    /*background-color: darkgrey;*/
+}
+
+.c_n_edit_container > div {
+    /*border: 1px solid silver;*/
+    line-height: 20px;
+}
+
+.edit_object ul {
+    /*background-color: #2a6496;*/
+}
+
+.edit_object ul li {
+    float: left;
+    list-style: none;
+    margin-right: 4rem;
+}
+
+.add_button {
+
+    line-height: 2rem;
+    display: block;
+}
+
+.edit_object {
+    display: none;
+}
+
+.add_button > a {
+    color: #3c763d;
+    display: inline-block;
+    margin-bottom: auto;
+}
+
+.add_button_show {
+
+}
+
+.add_button_show .edit_object {
+    display: inline-block;
+}
+
+.add_button_show > a {
+    transform: rotate(45deg);
+    -ms-transform: rotate(45deg); /* IE 9 */
+    -moz-transform: rotate(45deg); /* Firefox */
+    -webkit-transform: rotate(45deg); /* Safari 和 Chrome */
+    -o-transform: rotate(45deg); /* Opera */
+    opacity: 1
+}
+
+.add_button a {
+    color: black;
+    font-size: 2rem;
+}
+
+.add_button span {
+    font-size: 2rem;
+}
+
+.add_button a:hover {
+    text-decoration: none;
+    cursor: pointer;
+    color: #5cb85c;
+}
+
+.add_text_con {
+    text-align: right;
+    display: none;
+}
+
+.textarea_text {
+    width: 100%;
+    height: 20rem;
+    /*border: 1px solid red;*/
+}
+
+.add_img_con, .add_section_title {
+    display: none;
+    padding-top: 5rem;
+    height: 20rem;
+    /*line-height: 20rem;*/
+    text-align: center;
+    border: 1px solid wheat;
+}
+
+.add_img_con > span > div > span {
+    font-size: 4rem;
+!important;
+    color: white;
+}
+
+.add_img_con > span > div {
+    text-align: left;
+    padding-top: 2rem;
+    padding-left: 2rem;
+    font-size: 4rem;
+    color: white;
+    width: 30rem;
+    height: 8rem;
+    background-color: #3C3C3C
+}
+.add_title_con{
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    display: none;
+    text-align: right;
+}
+.add_title_con button {
+    margin-right: 10%;
+}
+.add_title_con input{
+    margin-left: 10%;
+    width: 80%;
+}
+.g_img_content{
+    padding-top: 3rem;
+    margin-bottom: 5rem;
+}
+.body_text_val{
+    text-align: left;
+    padding-top: 5rem;
+}

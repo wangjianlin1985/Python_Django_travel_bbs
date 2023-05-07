@@ -1,0 +1,93 @@
+body {
+    font-family: "Microsoft YaHei";
+    background: gainsboro;
+}
+
+.cont {
+    margin-top: 4rem;
+}
+
+.left_essay {
+    background: white;
+    min-height: 8rem;
+    margin-bottom: 3rem;
+    padding: 4rem 3rem 3rem 3rem;
+}
+
+.essay_title_con {
+    text-align: center;
+    font-family: "Microsoft YaHei";
+}
+
+.essay_title_con h2, .essay_title_con span {
+    margin-bottom: 2rem;
+}
+
+.essay_body_con {
+    padding-top: 2rem;
+}
+
+.essay_body_con img {
+    width: 100%;
+}
+
+.essay_body_con p {
+    width: 100%;
+    margin: 3rem 0 2rem 0;
+    height: 8rem;
+    line-height: 2rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.8rem;
+    text-indent: 2rem;
+}
+
+.buttom_page {
+    height: 5rem;
+    margin-bottom: 1rem;
+}
+
+.right_community, .right_tag, .rigth-section {
+    background: white;
+    margin-bottom: 2rem;
+    padding: 2rem 3rem 2rem 3rem;
+    text-align: left;
+}
+
+.right_community hr, .right_tag hr, .rigth-section hr {;
+
+    width: 8rem;
+    border: 0.5px solid #555555;
+    margin-left: 0;
+    margin-top: 0;
+}
+
+.right_community h4, .right_tag h4, .rigth-section h4 {
+    font-size: 2.2rem;
+}
+
+.right_tag span {
+    font-size: 1.5rem;
+    margin: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    opacity: 0.90;
+    display: inline-block;
+}
+
+.right_tag span:hover {
+    font-size: 1.5rem;
+    margin: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    background: red;
+    color: white;
+    opacity: 0.50;
+    display: inline-block;
+}
+.rigth-section p{
+color: rebeccapurple;
+    line-height: 3rem;
+    font-size: 1.8rem;
+    cursor: pointer;
+}

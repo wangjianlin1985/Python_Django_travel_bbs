@@ -1,0 +1,169 @@
+<div class="container text_body" style="padding: 20px 0 20px 0;width: 80%">
+    <p name="guide_body" id="{{ body_uuid }}">{{ text_str }}</p>
+</div>
+<div class="edit_container" title="{{ edit_uuid }}">
+                    <div class="c_n_edit_container">
+
+                        <div title="" class="add_button add_button_show">
+                            <a role="button" class="glyphicon glyphicon-plus show_edit_box_btn" title="添加"></a>
+                            <div class="edit_object">
+                                <ul>
+                                    <li class="eo_word _j_add_text_btn">
+                                        <a role="button" class="edit_add_text" title="添加文字">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                            添加文字</a>
+                                    <li class="eo_pic _j_uploadbtncnt">
+                                        <a class="edit_add_image" role="button" title="添加照片">
+                                            <span class="glyphicon glyphicon-picture"></span>
+                                            添加照片</a>
+                                    </li>
+                                    <li class="eo_title _j_add_paragraph_title_btn">
+                                        <a role="button" class="edit_add_title" title="添加段落标题">
+                                            <span class="glyphicon glyphicon-align-left"></span>
+                                            添加段落标题</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="edit_content add_text_con">
+                                    <textarea class="textarea_text"
+                                              placeholder="在这儿添加文章文字......"></textarea>
+                                <button type="button" class="add_text_btn btn">完成</button>
+                            </div>
+                            <div class="edit_content add_img_con">
+                        <span class="fileinput-button">
+                            <div>
+                                    <span class="glyphicon glyphicon-picture"></span>
+                                    <input id="note_img_content" name="files" type="file">
+                                 上传照片
+                            </div>
+                        </span>
+                            </div>
+                            <div class="edit_content add_title_con">
+                                <input type="text" class="form-control input-lg" id="section_title"
+                                       placeholder="输入段落标题...">
+                                <hr>
+                                <button type="button" class="add_title_btn btn btn-default">&nbsp;&nbsp;&nbsp;
+                                    确定&nbsp;&nbsp;&nbsp;
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<script>
+     $(document).ready(function () {
+            $("[title='{{ edit_uuid }}']").on("change", "#guide_title", function () {
+                //上传文章标题
+                var data = {
+                    "title": $(this).val().toString(),
+                    "uuid": $("#articles_uuid").val().toString()
+                };
+                data['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val()
+                $.post('/mycenter/note/create/create_title/', data, function (result) {
+                    result = JSON.parse(result)
+                    if (result.error_msg) {
+                        alert(result.error_msg)
+                    } else {
+                        console.log(result)
+                    }
+                })
+
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".show_edit_box_btn", function () {
+                //点击加号显示选项
+                if ($(".add_button").hasClass("add_button_show")) {
+                    $(".add_button").removeClass("add_button_show")
+                } else {
+                    $(".add_button").addClass("add_button_show")
+                }
+
+            });
+
+            $("[title='{{ edit_uuid }}']").on("click", ".edit_add_text", function () {
+                //点击添加文字显示出来多行文本框
+                $(".edit_content", "[title='{{ edit_uuid }}']").css("display", "none");
+                $(".add_text_con", "[title='{{ edit_uuid }}']").css('display', 'block')
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".edit_add_image", function () {
+                // 点击添加照片显示选择文件的页面
+                $(".edit_content", "[title='{{ edit_uuid }}']").css("display", "none");
+                $(".add_img_con", "[title='{{ edit_uuid }}']").css("display", "block")
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".edit_add_title", function () {
+                // 添加段落标题
+                $(".edit_content", "[title='{{ edit_uuid }}']").css("display", "none");
+                $(".add_title_con", "[title='{{ edit_uuid }}']").css("display", "block")
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".add_title_btn", function () {
+                var section_title = $("#section_title", "[title='{{ edit_uuid }}']").val();
+                var data = {
+                    "section_title": section_title,
+                    "title_uuid": $("#articles_uuid").val(),
+                    'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val(),
+                    "body_uuid": "{{ edit_uuid }}",
+
+                };
+                $.post("/mycenter/note/create/section/title/", data, function (result) {
+                    result = JSON.parse(result);
+                    if (result.error_msg) {
+                        alert(result.error_msg)
+                    } else {
+                        $.get("/mycenter/note/create/section/title/", result, function (res) {
+                            $("div[title=" + result['old_uuid'] + "]").after(res);
+                            $('.add_title_con', '.add_button_show').css("display", "none")
+                        })
+                    }
+
+                })
+
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".add_text_btn", function () {
+                var text_val = $(".textarea_text", "[title='{{ edit_uuid }}']").val();
+                var data = {
+                    "text": text_val,
+                    "title_uuid": $("#articles_uuid").val(),
+                    'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val(),
+                    "body_uuid": "{{ edit_uuid }}",
+                }
+                $.post("/mycenter/note/create/edit_text/", data, function (result) {
+                    result = JSON.parse(result);
+                    if (result.error_msg) {
+                        alert(result.error_msg)
+                    } else {
+                        result['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val()
+                        $.post("/mycenter/note/create/edit_text_get/", result, function (res) {
+                            $("div[title=" + result['old_uuid'] + "]").after(res);
+                            $('.add_text_con', '.add_button_show').css("display", "none")
+                        })
+                    }
+                })
+            })
+            var upload_img_content = $("#note_img_content", "[title='{{ edit_uuid }}']");
+            upload_img_content.fileupload({
+                url: '/mycenter/note/create/upload_img/?uuid=' + $("#articles_uuid").val() + '_{{ edit_uuid }}',
+                autoUpload: false,
+                maxFileSize: 5 * 1024 * 1024,
+                add: function (e, data) {
+                    data.submit().success(function (result, textStatus, jqXHR) {
+                        result = JSON.parse(result);
+                        if (result.error_msg) {
+                            alert(result.error_msg)
+
+                        } else {
+                            data = {
+                                "path": result["path"],
+                                "img_uuid": result.img_uuid,
+                                "old_uuid":result.old_uuid,
+                            };
+                            $.get('/mycenter/note/create/upload_img/', data, function (res) {
+                                $("div[title=" + result['old_uuid'] + "]").after(res);
+                                $('.add_img_con', '.add_button_show').css("display", "none")
+                            })
+                        }
+                    })
+                }
+            })
+
+
+        });
+</script>

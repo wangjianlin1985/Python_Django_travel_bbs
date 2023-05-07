@@ -1,0 +1,789 @@
+{% extends "base_with_menu.html" %}
+{% block title %} 目的地 {% endblock title %}
+{% block ext_before_css %}
+
+{% endblock ext_before_css %}
+{% block ext_after_css %}
+    <style>
+        body {
+            background-color: #F7F8FA;
+        }
+
+        .user_cover {
+            height: 20rem;
+            margin: 1rem 0 0 0;
+            background-color: rgba(150, 145, 147, 0.07);
+            overflow: hidden;
+        }
+
+        .user_cover p {
+            position: relative;
+            display: inline-block;
+            overflow: hidden;
+            font-size: 1.5rem;
+            margin-right: 2rem;
+            margin-top: 2rem;
+            color: #4F4F51;
+            border: 1px #E0E0E0 solid;
+            border-radius: 5px;
+            height: 2.8rem;
+            line-height: 2.4rem;
+            padding: 0.2rem 1rem 0.2rem 1rem;
+        }
+
+        .user_cover p input {
+            position: absolute;
+            right: 0;
+            height: 6em;
+            top: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            cursor: pointer;
+        }
+
+        .user_Profile {
+            border: solid 1px #E0E0E0;
+            min-height: 14rem;
+            padding: 1.5rem;
+            display: flex;
+            background-color: #ffffff;
+        }
+
+        .user_Profile-image {
+            height: 11rem;
+            width: 14rem;
+            background-color: #9FADC7;
+            position: relative;
+        }
+
+        .user_Profile-image-content {
+            width: 14rem;
+            height: 14rem;
+            overflow: hidden;
+            background-color: red;
+            position: absolute;
+            top: -3rem;
+            border: #ffffff 2px solid;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;;
+        }
+
+        .user_Profile-image-content img {
+            width: 14rem;
+            height: 14rem;
+            overflow: hidden;
+        }
+
+        .user_Profile-image-content input {
+            position: absolute;
+            height: 14em !important;
+            width: 14rem !important;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            -ms-filter: 'alpha(opacity=0)';
+            cursor: pointer;
+        }
+
+        .user_Profile-content {
+            min-height: 11rem;
+            width: 30rem;
+            flex: 1;
+            padding-left: 2rem;
+            display: block;
+        }
+
+        .user_Profile-content-head {
+            height: 3rem;
+        }
+
+        .user_Profile-content-body {
+            height: 6rem;
+            padding-top: 1rem;
+        }
+
+        .user_Profile-content-body div {
+            height: 2.5rem;
+            line-height: 2.5rem;
+        }
+
+        .user_Profile-content i {
+            font-size: 1.5rem;
+            color: #9FADC7;
+        }
+
+        .user_Profile-content-footer {
+            height: 2rem;
+            color: #9FADC7;
+        }
+
+        .more_data {
+            border: none;
+            outline: none;
+            background-color: #ffffff;
+            padding: 0;
+            margin: 0;
+        }
+
+        .edit_data_btn {
+            border: 1px solid #0F88EB;
+            border-radius: 5px;
+            width: 10rem;
+            height: 3rem;
+            margin-top: -1rem;
+            margin-right: 1rem;
+            color: #0F88EB;
+            background-color: #ffffff;
+            padding: 0;
+            outline: none;
+        }
+
+        .profile_main_column {
+            border: solid 1px #E7EAF1;
+            margin-top: 1rem;
+            background-color: #ffffff;
+        }
+
+        .profile_main_head {
+            clear: both;
+            padding-top: 1rem;
+        }
+
+        .profile_main_ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            clear: both;
+        }
+
+        .profile_main_ul li {
+            float: left;
+            margin: 0 2rem 0 2rem;
+            padding: 0 0 0.8rem 0;
+
+        }
+
+        .profile_main_ul li a {
+            font-size: 1.6rem;
+            color: #2E2E2E;
+            text-decoration: none;
+        }
+
+        .profile_main_ul li a span {
+            font-size: 1.2rem;
+            color: #8590A6;
+        }
+
+        .profile_main_activities {
+            padding: 1rem 2rem 5rem 2rem;
+        }
+
+        .list_text_main {
+
+        }
+
+        .list_text_head {
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-bottom: 1px solid #E7EAF1;
+        }
+
+        .profile_main_activities .list_item {
+            min-height: 5rem;
+            padding: 1rem 0 1rem 0;
+        }
+
+        .profile_main_activities .list_item_head {
+            padding: 0;
+            width: 100%;
+            margin: 0;
+            color: #8590A6;
+        }
+
+        .profile_main_activities .list_item_head div:nth-child(1) {
+            display: inline-block;
+            width: 80%;
+            margin: 0;
+        }
+
+        .profile_main_activities .list_item_head div:nth-child(2) {
+            display: inline-block;
+            text-align: right;
+            margin: 0;
+            width: 19%;
+
+        }
+
+        .content_item {
+            padding: 1rem 0 1rem 0;
+            border-bottom: 1px solid #E7EAF1;
+        }
+
+        .content_item a {
+            color: black;
+            text-decoration: none;
+        }
+
+        .profile_main_right_top {
+            border: solid 1px #E7EAF1;
+            background-color: #ffffff;
+            text-align: center;
+            height: 6rem;
+            padding: 1rem 0 1rem 0;
+        }
+
+        .profile_main_right_top:after {
+            /*清除浮动*/
+            content: ".";
+            height: 0;
+            visibility: hidden;
+            display: block;
+            clear: both;
+        }
+
+        .profile_main_right_top a {
+            float: left;
+            width: 50%;
+            text-decoration: none;
+        }
+
+        .profile_main_right_top a div {
+            height: 2rem;
+        }
+
+        .profile_main_right_top a div:nth-child(1) {
+            color: #9FADC7;
+        }
+
+        .profile_main_right_top a div:nth-child(2) {
+            color: black;
+        }
+
+        .active_tab {
+            border-bottom: 3px solid #0F88EB;
+            font-weight: bold;
+        }
+
+        .tiezi_username, .tiezi_username a {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .tiezi_username span {
+            color: #999999;
+            font-weight: 100;
+        }
+
+        .attention_h4_title, .attention_h4_title a {
+            margin: 0;
+            padding: 0;
+            margin-bottom: 0.5rem;
+            font-family: "Microsoft YaHei";
+            font-size: 1.5rem;
+            color: #285599;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .answer_list {
+            margin: 1rem 0.5rem 1rem 0.5rem;
+            padding: 0 1rem 0 1rem;
+            border: solid 1px #eeeeee;
+            box-shadow: 0 0 3px #eeeeee;
+        }
+
+        .paersonal_data_item {
+            padding: 3rem 0 3rem 0
+        }
+
+        .paersonal_title {
+            font-weight: bold;
+        }
+
+        .none_btn {
+            border: none;
+            outline: none;
+            text-decoration: none;
+            background-color: #ffffff;
+            color: #428BCA;
+        }
+    </style>
+{% endblock ext_after_css %}
+{% block content %}
+    <div class="container" id="home" style="min-height: 800px">
+        <div class="user_cover" id="user_home_bgk" style="background: url({{ user_home }})">
+            <p class="navbar-right">
+                <span class="glyphicon glyphicon-camera"></span>&nbsp;&nbsp;
+                <input type="file" name="home_img" id="upload_cover_images"
+                       accept="image/gif, image/jpeg, image/png, image/jpg">
+                编辑封面图片
+            </p>
+        </div>
+        <div class="user_Profile">
+            <div class="user_Profile-image">
+                <div class="user_Profile-image-content">
+                    <img id="user_title_img" src="{{ user_title }}" alt="">
+                    <input type="file" name="user_title" id="upload_user_title"
+                           accept="image/gif, image/jpeg, image/png, image/jpg">
+                </div>
+            </div>
+            <div class="user_Profile-content">
+                <div id="edit_personal_data" style="display: none">
+                    <div class="user_Profile-content-head">
+                        <div style="float: left">
+                            <h3 style="padding: 0;margin: 0">{{ show_name }}
+                            </h3>
+                        </div>
+                        <div style="float: right">
+                            <button class="none_btn" type="button" @click="go_home">
+                                返回个人主页 >
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row paersonal_data_item" style="clear: both">
+                        <div class="col-lg-3 paersonal_title">
+                            性别
+                        </div>
+                        <div class="col-lg-9 ">
+                            <div id="paersonal_item_sex1">
+                                <span id="sex_show_leabl">{{ sex }}</span>
+                                <span>
+                                <button @click="edit_sex_show_btn" class="none_btn" type="button">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    &nbsp;修改&nbsp;</button>
+                                </span>
+                            </div>
+                            <div id="paersonal_item_sex2" style="display: none">
+                                <label style="font-weight: 500">
+                                    <input name="sex" v-model="sex" type="radio" value="man"/> 男
+                                </label>
+                                &nbsp;&nbsp;&nbsp;
+                                <label style="font-weight: 500">
+                                    <input name="sex" v-model="sex" type="radio" value="woman"/>女
+                                </label>
+                                <div style="padding-top: 2rem">
+                                    <button class="btn btn-primary" @click="btn_sex_save" type="button">保存</button>
+                                    <button class="btn btn-default" @click="btn_sex_close" type="button">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row paersonal_data_item">
+                        <div class="col-lg-3 paersonal_title">
+                            一句话介绍自己
+                        </div>
+                        <div class="col-lg-9 ">
+                            <div id="paersonal_item_signatrue1">
+                                <span id="signatrue_show_leabl">{{ signatrue }}</span>
+                                <span>
+                                <button @click="edit_signatrue_show_btn" class="none_btn" type="button">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    &nbsp;编辑&nbsp;</button>
+                                </span>
+                            </div>
+                            <div id="paersonal_item_signatrue2" style="display: none">
+                                <input style="width: 80%" type="text" v-model="signatrue" class="form-control"
+                                       id="input_signatrue" placeholder="请输入一句话描述自己">
+                                <div style="padding-top: 2rem">
+                                    <button class="btn btn-primary" @click="btn_signatrue_save" type="button">保存
+                                    </button>
+                                    <button class="btn btn-default" @click="btn_signatrue_close" type="button">取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row paersonal_data_item">
+                        <div class="col-lg-3 paersonal_title">
+                            个人简介
+                        </div>
+                        <div class="col-lg-9 ">
+                            <div id="paersonal_item_abstract1">
+                                <span id="abstract_show_leabl">{{ abstract }}</span>
+                                <span>
+                                <button @click="edit_abstract_show_btn" class="none_btn" type="button">
+                                    <span class="glyphicon glyphicon-pencil"></span>
+                                    &nbsp;编辑&nbsp;</button>
+                                </span>
+                            </div>
+                            <div id="paersonal_item_abstract2" style="display: none">
+                                <textarea name="abstract" id="abstract" v-model="abstract"
+                                          style="width: 80%;height: 8rem;outline: none"></textarea>
+                                <div style="padding-top: 2rem">
+                                    <button class="btn btn-primary" @click="btn_abstract_save" type="button">保存
+                                    </button>
+                                    <button class="btn btn-default" @click="btn_abstract_close" type="button">取消
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: block" id="personal_data">
+                    <div class="user_Profile-content-head">
+                        <h3 style="padding: 0;margin: 0">{{ show_name }}
+{#                            <small>web攻城狮</small>#}
+                        </h3>
+                    </div>
+                    <div class="user_Profile-content-body">
+                        <div>
+                            <i class="glyphicon glyphicon-edit"></i>
+                            &nbsp;&nbsp;<span>{{ signatrue }}</span>
+
+                        </div>
+                    </div>
+
+                    <div class="user_Profile-content-footer">
+                        <button class="more_data" type="button">
+                            <i class="glyphicon glyphicon-chevron-down"></i>
+                            &nbsp;&nbsp;<span @click="edit_personal_data">更多资料</span>
+                        </button>
+                        <button type="button" @click="edit_personal_data" class="edit_data_btn navbar-right">
+                            编辑个人资料
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="personal_dynamic" class="row">
+            <div class="col-lg-9 " style="padding-right:0">
+                <div class="profile_main_column">
+                    <div class="profile_main_head">
+                        <ul class="profile_main_ul">
+                            <!--
+                            <li {% if action == "dynamic" %} class="active_tab" {% endif %}><a
+                                    href="/home/people/fangxinyun/dynamic/">动态</a></li>
+                                    -->
+                            <li {% if action == "attention" %} class="active_tab" {% endif %}><a
+                                    href="/home/people/{{ request.user }}/attention/">关注&nbsp;<span>{{ attention_count }}</span></a>
+                            </li>
+                            <li {% if action == "problem" %} class="active_tab" {% endif %}><a
+                                    href="/home/people/{{ request.user }}/problem/">提问&nbsp;<span>{{ problem_count }}</span></a>
+                            </li>
+                            <li {% if action == "answer" %} class="active_tab" {% endif %}><a
+                                    href="/home/people/{{ request.user }}/answer/">回答&nbsp;<span>{{ answer_count }}</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="profile_main_activities" style="clear: both;border-top: 1px solid #F0F2F7">
+                        {% if action == 'problem' %}
+                            <div class="list_text_head">
+                                <p>我的提问</p>
+                            </div>
+                            <div class="list_text_main">
+                                {% for item in item_list %}
+                                    <div class="list_item">
+                                        <div class="list_item_head" style="">
+                                            <div style="">{{ item.title }}</div>
+                                            <div style="">{{ item.write_date }}</div>
+                                        </div>
+                                        <div class="content_item">
+                                            <a href="/community/comm/text_view/{{ item.id }}/">
+                                                {{ item.text_txt }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+                        {% elif action == 'answer' %}
+                            <div class="list_text_head">
+                                <p>我的评论</p>
+                            </div>
+                            <div class="list_text_main">
+                                {% for item in item_list %}
+                                    <div class="list_item">
+                                        <div class="list_item_head" style="">
+                                            <div style="">
+                                                <h4 class="attention_h4_title">
+                                                    <a href="/community/comm/text_view/{{ q.id }}/">
+                                                        <p>  {{ item.title }} </p>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div style="">{{ item.write_date }}</div>
+                                        </div>
+                                        <div class="content_item">
+                                            <a href="/community/comm/text_view/{{ item.id }}/">
+                                                {{ item.text_txt }}
+                                            </a>
+                                            <div class="answer_list">
+                                                {% for answer_item in item.answer %}
+                                                    <div class="answer_item" style="padding: 1rem 0 1rem 0">
+                                                        <div class="user_icon" style="float: left">
+                                                            <img style="height: 4rem;width: 4rem"
+                                                                 src="{{ answer_item.user_path }}"
+                                                                 alt="">
+                                                        </div>
+                                                        <div class="uname_signatrue"
+                                                             style="float: left;padding-left: 2rem">
+                                                            <div style="line-height: 2rem">
+                                                                {{ answer_item.show_name }}
+                                                            </div>
+                                                            <div style="line-height: 2rem">
+                                                                {{ answer_item.signatrue }}
+                                                            </div>
+                                                        </div>
+                                                        <div class="answer_date" style="float: right">
+                                                            {{ answer_item.write_date }}
+                                                        </div>
+                                                        <div style="clear: both;padding: 1rem 0 0 0">
+                                                            {{ answer_item.text|safe }}
+                                                        </div>
+                                                    </div>
+                                                {% endfor %}
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+                        {% elif action == 'attention' %}
+                            <div class="list_text_head">
+                                <p>我的关注</p>
+                            </div>
+                            <div class="list_text_main">
+                                {% for item in item_list %}
+                                    <div class="list_item">
+                                        <div class="list_item_head" style="">
+                                            <div style="">
+                                                <h4 class="attention_h4_title">
+                                                    <a href="/community/comm/text_view/{{ q.id }}/">
+                                                        <p>  {{ item.title }} </p>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div style="">{{ item.write_date }}</div>
+                                        </div>
+                                        <div>
+                                            <p class="tiezi_username">
+                                                <a href="#">{{ item.user_name }},<span>{{ item.signatrue }}</span></a>
+                                            </p>
+                                        </div>
+                                        <div class="content_item">
+                                            <a href="/community/comm/text_view/{{ item.id }}/">
+                                                {{ item.text_txt }}
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+
+                        {% elif action == 'dynamic' %}
+                            <div class="list_text_head">
+                                <p>我的动态</p>
+                            </div>
+                            <div class="list_text_main">
+                                <div class="list_item">
+                                    <div class="list_item_head" style="">
+                                        <div style="">关注了问题</div>
+                                        <div style="">1天前</div>
+                                    </div>
+                                    <div class="content_item">
+                                        <a href="/home/">
+                                            如果你很爱一个人，但是你却感觉他只是一般般喜欢你，你还会继续吗？
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="list_item">
+
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 ">
+                <div class="profile_main_column">
+                    <div class="profile_main_right_top">
+                        <a href="/home/">
+                            <div>
+                                收藏
+                            </div>
+                            <div>
+                                70
+                            </div>
+                        </a>
+                        <a href="/home/">
+                            <div>
+                                被收藏
+                            </div>
+                            <div>
+                                60
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block ext_js %}
+    <script src="/static/js/vendor/jquery.ui.widget.js"></script>
+    <script src="/static/js/vendor/jquery.iframe-transport.js"></script>
+    <script src="/static/js/vendor/jquery.fileupload.js"></script>
+    <script src="/static/js/vendor/jquery.fileupload-process.js"></script>
+    <script src="/static/js/vendor/jquery.fileupload-validate.js"></script>
+    <script type="text/javascript">
+        var home_vue = new Vue({
+            delimiters: ['{$', '$}'],
+            el: "#home",
+            data: {
+                sex: "{{ sex_alias }}",
+                signatrue: "{{ signatrue }}",
+                abstract: "{{ abstract }}"
+            },
+            mounted: function () {
+                var self = this;
+                self._init_upload_image()
+            }
+            ,
+            methods: {
+                go_home: function () {
+                    $("#edit_personal_data").css("display", "none");
+                    $("#personal_data").css("display", "block");
+                    $("#personal_dynamic").css("display", "block");
+                },
+                _init_upload_image: function () {
+                    $("#upload_cover_images").fileupload({
+                        url: '/base/upload_img/',
+                        sequentialUploads: true,
+                        formData: {
+                            "csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val(),
+                            "user_id":{{ request.user.id }},
+                            "page": "user_home"
+                        },
+                        add: function (e, data) {
+                            var jqXHR = data.submit().success(function (result, textStatus, jqXHR) {
+                                var res_arr = result.split("|")
+                                if (res_arr.length > 1) {
+                                    alert(res_arr[1])
+                                } else {
+                                    $("#user_home_bgk").css("background", "url(" + result + ")")
+                                }
+                            })
+                        }
+                    });
+                    $("#upload_user_title").fileupload({
+                        url: '/base/upload_img/',
+                        sequentialUploads: true,
+                        formData: {
+                            "csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val(),
+                            "user_id":{{ request.user.id }},
+                            "page": "user_title"
+                        },
+                        add: function (e, data) {
+                            var jqXHR = data.submit().success(function (result, textStatus, jqXHR) {
+                                var res_arr = result.split("|")
+                                console.log(res_arr)
+                                if (res_arr.length > 1) {
+                                    alert(res_arr[1])
+                                } else {
+                                    $("#user_title_img").attr("src", result)
+
+                                }
+                            })
+                        }
+                    })
+                },
+                edit_personal_data: function () {
+                    $("#personal_dynamic").css("display", "none");
+                    $("#personal_data").css("display", "none");
+                    $("#edit_personal_data").css("display", "block")
+                },
+                edit_sex_show_btn: function () {
+                    $("#paersonal_item_sex1").css("display", "none");
+                    $("#paersonal_item_sex2").css("display", "block")
+                },
+                edit_signatrue_show_btn: function () {
+                    $("#paersonal_item_signatrue1").css("display", "none");
+                    $("#paersonal_item_signatrue2").css("display", "block")
+                },
+                btn_sex_save: function () {
+                    var self = this;
+                    var data = {
+                        "field": "sex",
+                        "data": self.sex,
+                        "csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val()
+                    };
+                    $.post("/home/people/modify_data/", data, function (result) {
+                        result = JSON.parse(result);
+                        if (result.error_msg) {
+                            alert(result.error_msg)
+                        } else {
+                            if (self.sex === "man") {
+                                $("#sex_show_leabl").html("男")
+                            } else {
+                                $("#sex_show_leabl").html("女")
+                            }
+                            $("#paersonal_item_sex1").css("display", "block");
+                            $("#paersonal_item_sex2").css("display", "none")
+                        }
+                        console.log(result)
+                    })
+                },
+                btn_sex_close: function () {
+                    $("#paersonal_item_sex1").css("display", "block");
+                    $("#paersonal_item_sex2").css("display", "none")
+                },
+                btn_signatrue_save: function () {
+                    var self = this;
+                    var data = {
+                        "field": "signatrue",
+                        "data": self.signatrue,
+                        "csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val()
+                    };
+                    $.post("/home/people/modify_data/", data, function (result) {
+                        result = JSON.parse(result);
+                        if (result.error_msg) {
+                            alert(result.error_msg)
+                        } else {
+                            $("#signatrue_show_leabl").html(self.signatrue);
+                            $("#paersonal_item_signatrue1").css("display", "block");
+                            $("#paersonal_item_signatrue2").css("display", "none")
+                        }
+                        console.log(result)
+                    })
+                },
+                btn_signatrue_close: function () {
+                    $("#paersonal_item_signatrue1").css("display", "block");
+                    $("#paersonal_item_signatrue2").css("display", "none")
+                },
+                edit_abstract_show_btn: function () {
+                    $("#paersonal_item_abstract1").css("display", "none");
+                    $("#paersonal_item_abstract2").css("display", "block")
+                },
+                btn_abstract_save: function () {
+                    var self = this;
+                    var data = {
+                        "field": "abstract",
+                        "data": self.abstract,
+                        "csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val()
+                    };
+                    $.post("/home/people/modify_data/", data, function (result) {
+                        result = JSON.parse(result);
+                        if (result.error_msg) {
+                            alert(result.error_msg)
+                        } else {
+                            $("#abstract_show_leabl").html(self.abstract);
+                            $("#paersonal_item_abstract1").css("display", "block");
+                            $("#paersonal_item_abstract2").css("display", "none")
+                        }
+                        console.log(result)
+                    })
+                },
+                btn_abstract_close: function () {
+                    $("#paersonal_item_abstract1").css("display", "block");
+                    $("#paersonal_item_abstract2").css("display", "none")
+                }
+            }
+        })
+    </script>
+{% endblock ext_js %}

@@ -1,0 +1,583 @@
+{% extends "base_with_menu.html" %}
+{% block title %} 目的地 {% endblock title %}
+{% block ext_before_css %}
+
+{% endblock ext_before_css %}
+{% block ext_after_css %}
+    <style>
+        .settings_item {
+            padding-top: 2rem;
+            display: flex;
+        }
+
+        .div_label {
+            width: 8rem;
+        }
+
+        .settings_item span {
+            cursor: pointer;
+        }
+
+        .item_text {
+            flex: 1;
+        }
+
+        .modify {
+
+        }
+
+        .email_text {
+            padding: 1rem 0 1rem 0;
+        }
+
+        .item_text input {
+            width: 16rem;
+        }
+
+        .model_group {
+
+        }
+
+        a, a:hover, a:link, a:visited {
+            text-decoration: none;
+        }
+
+        button, button:focus {
+            outline: none !important;
+        }
+
+    </style>
+{% endblock ext_after_css %}
+{% block content %}
+    <div id="setting" style="min-height: 800px">
+        {% csrf_token %}
+        <div class="container" style="padding: 2rem 0 5rem 0">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#base_data" aria-controls="base_data" role="tab" data-toggle="tab">基本资料</a>
+                </li>
+                <li role="presentation">
+                    <a href="#acc_psd" aria-controls="acc_psd" role="tab" data-toggle="tab">账号和密码</a>
+                </li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="base_data">
+                    <div class="settings_item">
+                        <div class="div_label">姓名</div>
+                        <div style="display: inline-block">
+                            <span>{{ show_name }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane " id="acc_psd">
+                    <div class="settings_item" id="email">
+                        <div class="div_label">邮箱</div>
+                        <div class="item_text">
+                            <div class="group_text">
+                                <span class="active_email">{{ email }}</span>
+                                <a class="modify" href="javascript:void(0)"
+                                   @click.prevent="modify_email('{{ email }}')">
+                                    {% if not email %}添加{% else %}修改{% endif %}
+                                </a>
+                            </div>
+                            <div class="get_email_div" style="display: none">
+                                <div class="email_text">
+                                    <span>
+                                    <input v-model="new_email" @blur="valid_email" type="email" class="form-control"
+                                           id="exampleInputEmail1" placeholder="请输入邮箱">
+                                    </span>
+                                    <span class="email_valid_msg" style="color: red;display: none">请输入正确的邮箱</span>
+                                </div>
+                                <div class="email_code" style="display: none">
+                                    <div style="float: left">
+                                        <input style="width:12rem" v-model="auth_code" type="text"
+                                               class="form-control" placeholder="请输入验证码">
+                                    </div>
+                                    <div style="float: left;height: 3rem;line-height: 3rem;cursor: pointer;padding-left: 1rem">
+                                        <a id="send_new_code" @click.prevent="send_new_valid_code">发送验证码</a>
+                                    </div>
+                                    <div style="clear: left;padding-top: 1rem">
+                                        <button type="button" @click="save_new_email" class="btn btn-default">
+                                            保存
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="settings_item" id="telephone">
+                        <div class="div_label">手机号</div>
+                        <div class="item_text">
+                            <div>
+                                <span class="active_telephone">{{ telephone }}</span>
+                                <a href="javascript:void(0)" class="modify"
+                                   @click="modify_telephone('{{ telephone }}')">
+                                    {% if not telephone %}
+                                        添加
+                                    {% else %}
+                                        修改
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="get_tel_div" style="display: none">
+                                <div class="email_text">
+                                    <span>
+                                    <input v-model="new_tel" type="text" class="form-control" placeholder="请输入新手机号">
+                                    </span>
+                                </div>
+                                <div class="tel_code" style="display: block">
+                                    <div style="float: left">
+                                        <input style="width:12rem" v-model="auth_code" type="text"
+                                               class="form-control" placeholder="请输入验证码">
+                                    </div>
+                                    <div style="float: left;height: 3rem;line-height: 3rem;cursor: pointer;padding-left: 1rem">
+                                        <a id="send_new_code_tel" @click.prevent="send_tel_valid_code">发送验证码</a>
+                                    </div>
+                                    <div style="clear: left;padding-top: 1rem">
+                                        <button type="button" @click="save_new_telephone" class="btn btn-default">
+                                            保存
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="settings_item">
+                        <div class="div_label">账号密码</div>
+                        <div class="item_text">
+                            <a id="show_password_box" data-toggle="popover" placement="bottom" data-content="密码修改成功"
+                               @click="show_password_box" href="javascript:void(0)">
+                                修改密码
+                            </a>
+                            <div id="modify_password_content" style="display: none">
+                                <div style="margin-top: 1rem;">
+                                    <div style="float: left;height: 2.5rem;line-height: 2.5rem;">
+                                        <input type="password" v-model="password1" class="form-control" id="password1"
+                                               @blur="password_change" placeholder="请输入密码">
+                                    </div>
+                                    <div style="float: left;height: 2.5rem;line-height: 2.5rem;color: red;margin-left: 1rem">
+                                        <p id="password1_label" style="display: none">密码必须填写</p>
+                                    </div>
+                                    <p style="clear: both;margin: 0;padding: 0"></p>
+                                </div>
+                                <div style="margin-top: 1rem;">
+                                    <div style="float: left;height: 2.5rem;line-height: 2.5rem;">
+                                        <input type="password" v-model="password2" class="form-control" id="password2"
+                                               @blur="password_change" placeholder="再次输入">
+                                    </div>
+                                    <div style="float: left;height: 2.5rem;line-height: 2.5rem;color: red;margin-left: 1rem">
+                                        <p id="password2_label" style="display: none">请再次输入相同的值</p>
+                                    </div>
+                                    <p style="margin: 0;padding: 0;clear: both"></p>
+                                </div>
+                                <div style="margin-top: 1rem">
+                                    <button @click="modify_password" class="btn btn-default">确认修改</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div style="width: 40rem" class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">验证身份</h4>
+                    </div>
+                    <div class="modal-body" style="padding: 0">
+                        <div class="model_group">
+                            <p style="color: #999999;margin-left: 1.5rem">为了保障你的安全请进行身份验证</p>
+                        </div>
+                        <div class="model_group">
+                            <select v-model="select_valid" class="form-control" style="width: 30rem;margin-left: 5rem"
+                                    name="select_valid"
+                                    id="select_valid">
+
+                                {% if email %}
+                                    <option value="email">{{ email }}</option>{% endif %}
+                                {% if telephone %}
+                                    <option value="telephone">{{ telephone }}</option>{% endif %}
+                            </select>
+                        </div>
+                        <div class="model_group" style="padding:1rem 0 1rem 5rem">
+                            <div style="float: left;height: 3rem">
+                                <input style="width:12rem" @blur="valid_code_input" @change="valid_code_input"
+                                       v-model="psd_code" type="text" class="form-control" placeholder="请输入验证码">
+                            </div>
+                            <div style="float: left;height: 3rem;line-height: 3rem;margin-left: 2rem">
+                                <a id="send_valid_code" @click.prevent="send_valid_code"
+                                   href="javascript:void(0)">发送验证码</a>
+                            </div>
+                            <div id="valid_code_valid" style="height: 1rem;clear: both;color: red">
+                                <p style="display: none">验证码必须填写</p>
+                            </div>
+                            <div style="clear: both;padding-top: 1rem;text-align: right;padding-right: 5rem">
+                                <button type="button" @click.prevent="valid_btn_sumit" class="btn btn-default">验证
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+{% block ext_js %}
+    <script type="text/javascript">
+        var set = new Vue({
+            delimiters: ['{$', '$}'],
+            el: "#setting",
+            data: {
+                "email": "{{ email }}",
+                "new_email": "",
+                "email_valid": false,
+                "auth_code": '',
+                "psd_code": null,
+                "select_valid": "{{ deft_valid }}",
+                "second": 0,
+                "modify_type": null,
+                "password1": "",
+                "password2": "",
+                "new_tel": ""
+            },
+            mounted: function () {
+                var self = this;
+                $('#myModal').on('hidden.bs.modal', function (e) {
+                    $("p", "#valid_code_valid").fadeOut("slow");
+                    self.second = 0;
+                    self.psd_code = "";
+                })
+            },
+            methods: {
+                valid_email: function () {
+                    var self = this;
+                    var filter = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+                    var f_res = filter.test(self.new_email);
+                    if (f_res === false) {
+                        $(".email_valid_msg").fadeIn("slow");
+                        self.email_valid = false;
+                    } else {
+                        $(".email_valid_msg").fadeOut("slow");
+                        self.email_valid = true;
+                    }
+                },
+                modify_email: function (email) {
+                    var self = this;
+                    if (self.email === "") {
+                        if ($(".get_email_div").is(':hidden')) {
+                            $(".get_email_div").fadeIn("slow");
+                            $(".email_code").fadeIn("slow");
+                            $(".modify", "#email").html("取消")
+                        } else {
+                            $(".get_email_div").fadeOut("slow");
+                            $(".email_code").fadeOut("slow");
+                            $(".modify", "#email").html("修改");
+                            self.email = null;
+                        }
+                    } else {
+                        $('#myModal').modal("show");
+                        self.modify_type = "email";
+                    }
+                },
+                modify_telephone: function (telephone) {
+                    var self = this;
+                    if (self.email === "") {
+                        if ($(".get_tel_div").is(':hidden')) {
+                            $(".get_tel_div").fadeIn("slow");
+                            $(".tel_code").fadeIn("slow");
+                            $(".modify", "#telephone").html("取消")
+                        } else {
+                            $(".get_email_div").fadeOut("slow");
+                            $(".tel_code").fadeOut("slow");
+                            $(".modify", "#telephone").html("修改");
+                            self.email = null;
+                        }
+                    } else {
+                        $('#myModal').modal("show");
+                        self.modify_type = "tel";
+                    }
+                },
+                send_new_valid_code: function () {
+                    var self = this;
+                    if (self.second == 0 && self.email_valid === true) {
+                        $("#send_new_code").attr("disabled", "true");
+                        $("#send_new_code").css("color", "#999999");
+                        self.second = 60;
+                        var second = 60;
+                        var int = setInterval(function () {
+                            $("#send_new_code").html(second + " 秒后可重发");
+                            second = second - 1;
+                            if (second == 0) {
+                                $("#send_new_code").removeAttr("disabled");
+                                $("#send_new_code").html("重新发送");
+                                $("#send_new_code").css("color", "#428BCA");
+                                self.second = second;
+                                clearInterval(int)
+                            }
+
+                        }, 1000);
+                        if (self.email_valid === true) {
+                            var data = {
+                                "email": self.new_email.trim(),
+                                "type": "email"
+                            };
+                            $.get("/home/setting/get_email_code/", data, function (result) {
+                                result = JSON.parse(result);
+                                if (result.error_msg) {
+                                    alert(result.error_msg);
+                                    clearInterval(int);
+                                    self.second = 0;
+                                    $("#send_new_code").removeAttr("disabled");
+                                    $("#send_new_code").html("重新发送");
+                                    $("#send_new_code").css("color", "#428BCA");
+                                } else {
+                                    $(".email_code").fadeIn("slow");
+                                }
+                            })
+                        }
+                    }
+
+
+                },
+                send_tel_valid_code: function () {
+                    var self = this;
+                    if (self.second == 0) {
+                        $("#send_new_code_tel").attr("disabled", "true");
+                        $("#send_new_code_tel").css("color", "#999999");
+                        self.second = 60;
+                        var second = 60;
+                        var int = setInterval(function () {
+                            $("#send_new_code_tel").html(second + " 秒后可重发");
+                            second = second - 1;
+                            if (second == 0) {
+                                $("#send_new_code_tel").removeAttr("disabled");
+                                $("#send_new_code_tel").html("重新发送");
+                                $("#send_new_code_tel").css("color", "#428BCA");
+                                self.second = second;
+                                clearInterval(int)
+                            }
+
+                        }, 1000);
+                        var data = {
+                            "telephone": self.new_tel.trim(),
+                            "type": "tel"
+                        };
+                        $.get("/home/setting/get_email_code/", data, function (result) {
+                            result = JSON.parse(result);
+                            if (result.error_msg) {
+                                alert(result.error_msg);
+                                clearInterval(int);
+                                self.second = 0;
+                                $("#send_new_code_tel").removeAttr("disabled");
+                                $("#send_new_code_tel").html("重新发送");
+                                $("#send_new_code_tel").css("color", "#428BCA");
+                            } else {
+                                console.log(result)
+                                $(".email_code").fadeIn("slow");
+                            }
+                        })
+                    }
+                },
+                save_new_email: function () {
+                    var self = this;
+                    var data = {
+                        "email": self.new_email.trim(),
+                        "auth_code": self.auth_code.trim()
+                    };
+                    if (self.email_valid == true && self.auth_code.trim() != "") {
+                        $.get("/home/setting/save_new_email/", data, function (result) {
+                            result = JSON.parse(result);
+                            if (result.error_msg) {
+                                alert(result.error_msg)
+                            } else {
+                                if (result["result"] == true) {
+                                    $(".active_email").html(self.new_email);
+                                    $(".email_code").fadeOut("slow");
+                                    $(".get_email_div").fadeOut("slow");
+                                    self.select_valid = self.new_email;
+                                    if ($("#select_valid option")[0] === undefined) {
+                                        $("#select_valid").html('<option value="email">' + self.new_email + '</option>')
+                                    }
+                                    $(".modify", "#email").html("修改");
+                                } else {
+                                    alert(result["result"])
+                                }
+                            }
+                        })
+                    }
+                },
+                save_new_telephone: function () {
+                    var self = this;
+                    var data = {
+                        "telephone": self.new_tel.trim(),
+                        "auth_code": self.auth_code.trim()
+                    };
+
+                        $.get("/home/setting/save_new_telephone/", data, function (result) {
+                            result = JSON.parse(result);
+                            console.log(result)
+                            if (result.error_msg) {
+                                alert(result.error_msg)
+                            } else {
+                                if (result["result"] == true) {
+                                    $(".active_telephone").html(self.new_tel);
+                                    $(".get_tel_div").fadeOut("slow");
+                                   /*
+                                    self.select_valid = self.new_email;
+                                    if ($("#select_valid option")[0] === undefined) {
+                                        $("#select_valid").html('<option value="email">' + self.new_email + '</option>')
+                                    }
+                                    */
+                                    $(".modify", "#telephone").html("修改");
+                                } else {
+                                    alert(result["result"])
+                                }
+                            }
+                        })
+                },
+                send_valid_code: function () {
+                    var self = this;
+                    if (self.second === 0) {
+                        $("#send_valid_code").attr("disabled", "true");
+                        $("#send_valid_code").css("color", "#999999");
+                        self.second = 60;
+                        var second = 60;
+                        var int = setInterval(function () {
+                            $("#send_valid_code").html(second + " 秒后可重发");
+                            second = second - 1;
+                            if (second == 0) {
+                                $("#send_valid_code").removeAttr("disabled");
+                                $("#send_valid_code").html("重新发送");
+                                $("#send_valid_code").css("color", "#428BCA");
+                                self.second = second;
+                                clearInterval(int)
+                            }
+
+                        }, 1000);
+                        $.get("/home/setting/send_valid_code/", {"valid": self.select_valid}, function (result) {
+                            result = JSON.parse(result);
+                            if (result.error_msg) {
+                                $("#send_valid_code").removeAttr("disabled");
+                                $("#send_valid_code").html("重新发送");
+                                $("#send_valid_code").css("color", "#428BCA");
+                                self.second = 0;
+                                clearInterval(int);
+                                alert(result.error_msg)
+                            } else {
+                                console.log(result);
+                            }
+                        })
+                    }
+                },
+                valid_code_input: function () {
+                    if (this.psd_code === null) {
+                        $("p", "#valid_code_valid").fadeIn("slow");
+                    } else if (this.psd_code.trim() === '') {
+                        $("p", "#valid_code_valid").fadeIn("slow");
+                    } else {
+                        $("p", "#valid_code_valid").fadeOut("slow");
+                    }
+                },
+                valid_btn_sumit: function () {
+                    var self = this;
+                    if (self.psd_code === null) {
+                        $("p", "#valid_code_valid").fadeIn("slow");
+                    } else if (self.psd_code.trim() === '') {
+                        $("p", "#valid_code_valid").fadeIn("slow");
+                    } else {
+                        var data = {"psd_code": self.psd_code.trim(), "valid": self.select_valid};
+                        $.get("/home/setting/valid_email_tel/", data, function (result) {
+                            result = JSON.parse(result);
+                            if (result.error_msg) {
+                                alert(result.error_msg)
+                            } else if (result.valid == false) {
+                                alert("验证码不正确")
+                            } else if (self.modify_type == "email") {
+                                $('#myModal').modal("hide");
+                                $(".get_email_div").fadeIn("slow");
+                                $(".email_code").fadeIn("slow");
+                                $(".modify", "#email").html("取消")
+                            } else if (self.modify_type == "password") {
+                                $('#myModal').modal("hide");
+                                $("#modify_password_content").fadeIn("slow");
+                            } else if (self.modify_type == "tel") {
+                                $('#myModal').modal("hide");
+                                $(".get_tel_div", "#telephone").fadeIn("slow");
+                            }
+
+                        })
+                    }
+                },
+                show_password_box: function () {
+                    var self = this;
+                    if ($("#modify_password_content").is(':hidden')) {
+                        if (self.select_valid === "False") {
+                            $("#modify_password_content").fadeIn("slow");
+                        } else {
+                            $('#myModal').modal("show");
+                            self.modify_type = "password";
+                        }
+                    } else {
+                        $("#modify_password_content").fadeOut("slow");
+                    }
+
+                },
+                password_change: function () {
+                    var self = this;
+                    if (self.password1.trim() === "") {
+                        $("#password1_label").fadeIn(200);
+                    } else {
+                        $("#password1_label").fadeOut(200);
+                    }
+                    if (self.password1.trim() != self.password2.trim() || self.password2.trim() == '') {
+                        $("#password2_label").fadeIn(200);
+                    } else {
+                        $("#password2_label").fadeOut(200);
+                    }
+                },
+                modify_password: function () {
+                    var self = this;
+                    if (self.password1.trim() == self.password2.trim() && self.password2.trim() != "") {
+                        var data = {
+                            "password": self.password1,
+                            "csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val()
+                        };
+                        $.post("/home/setting/modify_password/", data, function (result) {
+                            result = JSON.parse(result);
+                            if (result.error_msg) {
+                                alert(result.error_msg)
+                            } else {
+                                if (result.modify === true) {
+                                    $("#modify_password_content").fadeOut("slow");
+                                    $("#show_password_box").popover("show");
+                                    setTimeout(function () {
+                                        $("#show_password_box").popover('destroy')
+                                    }, 3000)
+                                }
+                            }
+                        })
+                    }
+                },
+
+            },
+        })
+    </script>
+{% endblock ext_js %}

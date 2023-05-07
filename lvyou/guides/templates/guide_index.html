@@ -1,0 +1,60 @@
+{% extends "base_with_menu.html" %}
+{% block title %} 攻略 {% endblock title %}
+{% block content %}
+    <link rel="stylesheet" href="/static/css/essay_list.css">
+
+    <div class="container cont">
+        <div class="col-lg-8">
+
+            {% for item in essay_data %}
+                <div class="left_essay">
+                    <div class="essay_title_con">
+                        <h2>{{ item.title }}</h2>
+                        <span>作者：<a href="#">{{ item.user }}</a> &nbsp;·&nbsp;{{ item.date }}</span>
+                    </div>
+                    <div class="essay_body_con">
+                        <a href="{{ item.url }}">
+                            <img style="width: 100%"
+                                 src="{{ item.img_path }}"
+                                 alt="图片">
+                        </a>
+                        <p>
+                            {{ item.abstract }}
+                        </p>
+                        <a class="btn" type="button" href="{{ item.url }}">阅读全文</a>
+
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="buttom_page">
+                <ul class="pager">
+                    {% if previous_page %}
+                        <li><a href="/guide/{{ previous_page }}/">上一页</a></li>
+                    {% endif %}
+                    <li> 第{{ page }}页/共{{ all_page }}页</li>
+                    {% if next_page %}
+                        <li><a href="/guide/{{ next_page }}/">下一页</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="right_community">
+                <h4>社区</h4>
+                <hr>
+                <p>QQ群：108***092</p>
+                <p><span style="color: #269abc" class="glyphicon glyphicon-home"></span>&nbsp;<a href="/community/all/0/">问答社区</a></p>
+
+            </div>
+            <div class="right_tag">
+                <h4>标签</h4>
+                <hr>
+                <span>吃喝玩乐</span>
+                <span>远方</span>
+                <span>风景宜人</span>
+                <span>妹子多</span>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

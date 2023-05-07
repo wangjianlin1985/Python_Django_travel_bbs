@@ -1,0 +1,15 @@
+*{
+    font-family: "Microsoft YaHei";
+}
+
+
+.footer {
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    background-color: #3c3c3c;
+}
+.footer a {
+    color: #ffffff;
+}

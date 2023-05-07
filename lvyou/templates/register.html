@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.css.map">
+    <link rel="stylesheet" href="/static/css/login_and_register.css">
+    <script src="/static/js/vendor/jquery-1.11.1.min.js"></script>
+</head>
+<style>
+
+</style>
+<body>
+<img class="auto-background-img" src="/static/media/images/sysimg/beijing_qingxin_shui.jpg" alt="">
+
+<div class="container">
+    <div class="container-top">
+        <a href="/"><img src="/static/media/icon/icon/lvyou_128x128_hui.png" alt="旅游"></a>
+    </div>
+    <div class="login-box">
+        <form id="submit_register" action="/register/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="input" v-on:blur="username_blur" v-model="username" name="username" class="form-control"
+                       id="username" placeholder="username">
+                {% if username %}
+                    <p>{{ username }}</p>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">密码</label>
+                <input type="password" v-on:blur="password1_blur" v-model="password1" name="password1"
+                       class="form-control" id="exampleInputPassword1"
+                       placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">密码</label>
+                <input type="password" v-on:blur="password2_blur" v-model="password2" name="password2"
+                       class="form-control" id="exampleInputPassword1"
+                       placeholder="Password">
+                {% if password %}
+                    <p>{{ password }}</p>
+                {% endif %}
+            </div>
+
+            <button v-on:click="on_submit" type="submit" class="btn btn-default form-control">注册</button>
+        </form>
+    </div>
+<div class="switch_login_register"><span>已有账号<a href="/login/">去登陆</a></span></div>
+</div>
+
+
+<div style="display: none">
+    <form id="telephone_login" action="/register/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="telephone">手机号</label>
+            <input type="input" name="telephone" class="form-control" id="telephone" placeholder="手机号">
+            {% if user_msg %}
+                用户名不存在
+            {% endif %}
+        </div>
+        <div class="form-group">
+            <label for="exampleInputPassword1">验证码</label>
+            <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="验证码">
+            {% if psd_msg %}
+                密码错误
+            {% endif %}
+        </div>
+        {% if active_msg %}
+            账户被禁用
+        {% endif %}
+        <button id="get_auth_code" type="button" class="btn btn-default form-control">发送验证码</button>
+        <br><br>
+        <button type="submit" class="btn btn-default form-control">登陆</button>
+    </form>
+
+</div>
+
+
+</body>
+<script src="/static/js/vendor-components/vue2.0/vue.js"></script>
+<script src="/static/js/vendor/bootstrap.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#get_auth_code").click(function () {
+            var self = $(this);
+            var data = {
+                "telephone": $("[name='telephone']", "#telephone_login").val()
+            };
+            $.get("/register/", data, function (result) {
+                console.log(result)
+            });
+        })
+    });
+    var register = new Vue({
+        delimiters: ['{$', '$}'],
+        el: "#submit_register",
+        data: {
+            "username": null,
+            "password1": null,
+            "password2": null,
+        },
+        methods: {
+            username_blur: function () {
+                $("[name='username']").parent().find("p").detach();
+                if (this.username === null||this.username === "") {
+                    var p = '<p>用户名不能为空！</p>    ';
+                    $(p).insertAfter($("[name='username']"))
+                } else if (this.username.toString().length < 4) {
+                    var p = '<p>用户名长度必须大于5！</p>    ';
+                    $(p).insertAfter($("[name='username']"))
+                }
+            },
+            password1_blur: function () {
+                $("[name='password1']").parent().find("p").detach();
+                if (this.password1 === null||this.password1 === "") {
+                    var p = '<p>密码不能为空</p>    ';
+                    $(p).insertAfter($("[name='password1']"))
+                } else if (this.password1.toString().length < 4) {
+                    var p = '<p>密码长度至少4位</p>    ';
+                    $(p).insertAfter($("[name='password1']"))
+                }
+            },
+            password2_blur: function () {
+                $("[name='password2']").parent().find("p").detach();
+                if (this.password2 === null||this.password2 === "") {
+                    var p = '<p>确认密码不能为空！</p>    ';
+                    $(p).insertAfter($("[name='password2']"))
+                } else if (this.password2.toString().length < 4) {
+                    var p = '<p>密码长度至少4位！</p>    ';
+                    $(p).insertAfter($("[name='password2']"))
+                } else if (this.password1 != this.password2) {
+                    var p = '<p>两次密码输入必须一致！</p>';
+                    $(p).insertAfter($("[name='password2']"))
+                }
+
+            },
+            on_submit: function (event) {
+                if (this.username === null || this.password1 === null || this.password2 === null) {
+                    $("[name='password2']").parent().find("p").detach();
+                    var p = '<p>用户名或者密码不能为空！</p>';
+                    $(p).insertAfter($("[name='password2']"))
+                    event.preventDefault();
+                }
+                else if (this.username.toString() < 4 || this.password1.toString().length < 4 || this.password2.toString().length < 4 || this.password1 != this.password2) {
+                    event.preventDefault();
+                }
+            }
+        }
+    })
+
+</script>
+</html>

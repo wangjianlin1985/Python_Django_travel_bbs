@@ -1,0 +1,318 @@
+{% extends "base_with_menu.html" %}
+{% block title %} 写攻略 {% endblock title %}
+{% block ext_before_css %}
+{% endblock ext_before_css %}
+{% block ext_after_css %}
+    <link rel="stylesheet" href="/static/css/jquery.Jcrop.css">
+    <link rel="stylesheet" href="/static/css/edit_guide.css">
+    <style>
+        #again_title_img {
+            background-color: rgba(100, 100, 100, 0.5);
+            font-size: 2rem;
+            margin-left: 10%;
+            cursor: pointer;
+            visibility: hidden;
+        }
+    </style>
+{% endblock ext_after_css %}
+{% block content %}
+
+
+    <div class="container">
+        <button type="button" onclick="preview_essay()" class="btn btn-default navbar-btn navbar-right"
+                style="margin-right: 2rem">预览
+        </button>
+        <button onclick="save_note()" type="button" class="btn  navbar-btn navbar-right">保存草稿</button>
+        <input type="text" hidden id="title_name_uuid" value="{{ uuid }}">
+    </div>
+
+    <div id="t_img_con_back" class="jumbotron">
+        <div class="container">
+            <form class="form-horizontal" id="upload_title_form"
+                  enctype="multipart/form-data" method="post" novalidate>
+                {% csrf_token %}
+                <div style="width: 60%;margin-left: 20%;margin-top: 100px">
+                    <table id="upload_title_img_laber">
+                        <tr>
+                            <td>
+                        <span class="fileinput-button">
+                            <span class="glyphicon glyphicon-picture"></span>
+                            <input id="note_title_img" name="files[]" type="file"
+                                   accept="image/gif, image/jpeg, image/png, image/jpg">
+                        </span>
+                                <input type="text" hidden name="uuid" id="articles_uuid" value={{ uuid }}>
+                            </td>
+                            <td style="padding-left: 2rem">
+                                <h2>选择攻略头图
+                                    <small>图片尽量大</small>
+                                </h2>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <span id="again_title_img">重设图片</span>
+                <div class="input-group input-group-lg" style="width: 80%;margin: auto">
+                    <input type="text" id="guide_title" name="guide_title" class="form-control"
+                           placeholder="填写游记标题">
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+
+        <div class="col-lg-9" style="padding-bottom: 20px">
+            <div id="containe_body" style="min-height: 600px;">
+                <div class="edit_container" title="{{ edit_uuid }}">
+                    <div class="c_n_edit_container">
+
+                        <div title="" class="add_button add_button_show">
+                            <a role="button" class="glyphicon glyphicon-plus show_edit_box_btn" title="添加"></a>
+                            <div class="edit_object">
+                                <ul>
+                                    <li class="eo_word _j_add_text_btn">
+                                        <a role="button" class="edit_add_text" title="添加文字">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                            添加文字</a>
+                                    <li class="eo_pic _j_uploadbtncnt">
+                                        <a class="edit_add_image" role="button" title="添加照片">
+                                            <span class="glyphicon glyphicon-picture"></span>
+                                            添加照片</a>
+                                    </li>
+                                    <li class="eo_title _j_add_paragraph_title_btn">
+                                        <a role="button" class="edit_add_title" title="添加段落标题">
+                                            <span class="glyphicon glyphicon-align-left"></span>
+                                            添加段落标题</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="edit_content add_text_con">
+                                    <textarea class="textarea_text"
+                                              placeholder="在这儿添加文章文字......"></textarea>
+                                <button type="button" class="add_text_btn btn">完成</button>
+                            </div>
+                            <div class="edit_content add_img_con">
+                        <span class="fileinput-button">
+                            <div>
+                                    <span class="glyphicon glyphicon-picture"></span>
+                                    <input id="note_img_content" name="files" type="file">
+                                 上传照片
+                            </div>
+                        </span>
+                            </div>
+                            <div class="edit_content add_title_con">
+                                <input type="text" class="form-control input-lg" id="section_title"
+                                       placeholder="输入段落标题...">
+                                <hr>
+                                <button type="button" class="add_title_btn btn btn-default">&nbsp;&nbsp;&nbsp;
+                                    确定&nbsp;&nbsp;&nbsp;
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom: 3rem;text-align: right">
+                <button onclick="save_note()" style="margin-right: 1rem;" type="button" class="btn navbar-btn">&nbsp;&nbsp;保存草稿&nbsp;&nbsp;</button>
+                <button onclick="preview_essay()" style="margin-right: 2rem" type="button" class="btn btn-default">
+                    &nbsp;&nbsp;预览&nbsp;&nbsp;</button>
+                <button onclick="public_guide()" style="margin-right: 5rem" type="button" class="btn btn-info">
+                    &nbsp;&nbsp;发表攻略&nbsp;&nbsp;</button>
+            </div>
+        </div>
+        <div class="col-lg-3">
+            这里是文章标题
+            <div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <script src="/static/js/vendor/jquery.Jcrop.js"></script>
+
+    {#    <script async="true" src="/static/js/vendor/jquery.ui.widget.js"></script>#}
+    <script src="/static/js/vendor/jquery.ui.widget.js"></script>
+    <script src="/static/js/vendor/jquery.iframe-transport.js"></script>
+    <script src="/static/js/vendor/jquery.fileupload.js"></script>
+    <script src="/static/js/vendor/jquery.fileupload-process.js"></script>
+    <script src="/static/js/vendor/jquery.fileupload-validate.js"></script>
+    <script src="/static/js/create_note.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("body").on("change", "#guide_title", function () {
+                //上传文章标题
+                var data = {
+                    "title": $(this).val().toString(),
+                    "uuid": $("#articles_uuid").val().toString()
+                };
+                data['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val()
+                $.post('/mycenter/note/create/create_title/', data, function (result) {
+                    result = JSON.parse(result)
+                    if (result.error_msg) {
+                        alert(result.error_msg)
+                    } else {
+                        console.log(result)
+                    }
+                })
+
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".show_edit_box_btn", function () {
+                //点击加号显示选项
+                if ($(".add_button").hasClass("add_button_show")) {
+                    $(".add_button").removeClass("add_button_show")
+                } else {
+                    $(".add_button").addClass("add_button_show")
+                }
+
+            });
+
+            $("[title='{{ edit_uuid }}']").on("click", ".edit_add_text", function () {
+                //点击添加文字显示出来多行文本框
+                $(".edit_content", "[title='{{ edit_uuid }}']").css("display", "none");
+                $(".add_text_con", "[title='{{ edit_uuid }}']").css('display', 'block')
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".edit_add_image", function () {
+                // 点击添加照片显示选择文件的页面
+                $(".edit_content", "[title='{{ edit_uuid }}']").css("display", "none");
+                $(".add_img_con", "[title='{{ edit_uuid }}']").css("display", "block")
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".edit_add_title", function () {
+                // 添加段落标题
+                $(".edit_content", "[title='{{ edit_uuid }}']").css("display", "none");
+                $(".add_title_con", "[title='{{ edit_uuid }}']").css("display", "block")
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".add_title_btn", function () {
+                var section_title = $("#section_title", "[title='{{ edit_uuid }}']").val();
+                var data = {
+                    "section_title": section_title,
+                    "title_uuid": $("#articles_uuid").val(),
+                    'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val(),
+                    "body_uuid": "{{ edit_uuid }}",
+
+                };
+                $.post("/mycenter/note/create/section/title/", data, function (result) {
+                    result = JSON.parse(result);
+                    if (result.error_msg) {
+                        alert(result.error_msg)
+                    } else {
+                        $.get("/mycenter/note/create/section/title/", result, function (res) {
+                            $("div[title=" + result['old_uuid'] + "]").after(res);
+                            $('.add_title_con', '.add_button_show').css("display", "none")
+                        })
+                    }
+
+                })
+
+            });
+            $("[title='{{ edit_uuid }}']").on("click", ".add_text_btn", function () {
+                var text_val = $(".textarea_text", "[title='{{ edit_uuid }}']").val();
+                var data = {
+                    "text": text_val,
+                    "title_uuid": $("#articles_uuid").val(),
+                    'csrfmiddlewaretoken': $("input[name='csrfmiddlewaretoken']").val(),
+                    "body_uuid": "{{ edit_uuid }}",
+                }
+                $.post("/mycenter/note/create/edit_text/", data, function (result) {
+                    result = JSON.parse(result);
+                    if (result.error_msg) {
+                        alert(result.error_msg)
+                    } else {
+                        result['csrfmiddlewaretoken'] = $("input[name='csrfmiddlewaretoken']").val()
+                        $.post("/mycenter/note/create/edit_text_get/", result, function (res) {
+                            $("div[title=" + result['old_uuid'] + "]").after(res);
+                            $('.add_text_con', '.add_button_show').css("display", "none")
+                        })
+                    }
+                })
+            })
+            var upload_img_content = $("#note_img_content", "[title='{{ edit_uuid }}']");
+            upload_img_content.fileupload({
+                url: '/mycenter/note/create/upload_img/?uuid=' + $("#articles_uuid").val() + '_{{ edit_uuid }}',
+                autoUpload: false,
+                maxFileSize: 5 * 1024 * 1024,
+                add: function (e, data) {
+                    data.submit().success(function (result, textStatus, jqXHR) {
+                        result = JSON.parse(result);
+                        if (result.error_msg) {
+                            alert(result.error_msg)
+                        } else {
+                            data = {
+                                "path": result["path"],
+                                "img_uuid": result.img_uuid,
+                                "old_uuid": result.old_uuid,
+                            };
+                            $.get('/mycenter/note/create/upload_img/', data, function (res) {
+                                $("div[title=" + result['old_uuid'] + "]").after(res);
+                                $('.add_img_con', '.add_button_show').css("display", "none")
+                            })
+                        }
+                    })
+                }
+            })
+
+        });
+        function preview_essay() {
+            var body = $("[name='guide_body']");
+            var b_uuid = [];
+            for (var i = 0; i < body.length; i++) {
+                b_uuid.push($(body[i]).attr("id"))
+            }
+            var data = {
+                uuids: JSON.stringify(b_uuid),
+                title_uuid: $("#articles_uuid").val()
+            }
+            $.post('/mycenter/note/create/save_note/', data, function (result) {
+                result = JSON.parse(result);
+                if (result.error_msg) {
+                    alert(result.error_msg)
+                } else {
+                    console.log(result);
+                    {#                    $.get("/mycenter/note/create/view/" + result["title_uuid"] + "/")#}
+                    window.location.href = "/mycenter/note/create/view/" + result["title_uuid"] + "/"
+                }
+            })
+        }
+
+        function save_note() {
+            var body = $("[name='guide_body']");
+            var b_uuid = [];
+            for (var i = 0; i < body.length; i++) {
+                b_uuid.push($(body[i]).attr("id"))
+            }
+            var data = {
+                uuids: JSON.stringify(b_uuid),
+                title_uuid: $("#articles_uuid").val()
+            }
+            $.post('/mycenter/note/create/save_note/', data, function (result) {
+                result = JSON.parse(result);
+                if (result.error_msg) {
+                    alert(result.error_msg)
+                } else {
+                    console.log(result);
+                }
+            })
+        }
+
+        function public_guide() {
+            var body = $("[name='guide_body']");
+            var b_uuid = [];
+            for (var i = 0; i < body.length; i++) {
+                b_uuid.push($(body[i]).attr("id"))
+            }
+            var data = {
+                uuids: JSON.stringify(b_uuid),
+                title_uuid: $("#articles_uuid").val()
+            }
+            $.post('/mycenter/note/create/save_note/', data, function (result) {
+                result = JSON.parse(result);
+                if (result.error_msg) {
+                    alert(result.error_msg)
+                } else {
+                    $.get("/mycenter/note/create/save_note/public/" + result["title_uuid"] + "/")
+                }
+            })
+        }
+    </script>
+
+{% endblock content %}
